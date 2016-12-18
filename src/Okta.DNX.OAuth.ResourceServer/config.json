@@ -1,0 +1,7 @@
+{
+  "okta": {
+    "clientId": "[Enter the clientId of your OpenID Connect application as obtained from the Okta dashbord, e.g. koKWeLLKa6WmBQJ5mYUR]",
+    "organizationUrl": "https://example.oktapreview.com",
+    "authorizationServerIssuer":  ""
+  }
+}
