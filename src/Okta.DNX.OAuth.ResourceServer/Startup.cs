@@ -72,7 +72,7 @@ namespace Okta.DNX.OAuth.ResourceServer
                     {
                         policy
                         .RequireClaim("cid", clientId)
-                       .RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "call-api");
+                       .RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "todolist.read");
                     }
                 );
             }
