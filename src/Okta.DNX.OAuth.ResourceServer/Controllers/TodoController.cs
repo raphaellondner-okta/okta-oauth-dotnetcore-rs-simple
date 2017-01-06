@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Okta.DNX.OAuth.ResourceServer.Controllers
 {
-    [Authorize("todo.read")]
+    
     [Route("api/todo")]
     public class TodoController : Controller
     {
@@ -23,7 +23,7 @@ namespace Okta.DNX.OAuth.ResourceServer.Controllers
 
         public Models.ITodoRepository TodoItems { get; set; }
 
-        
+        [Authorize("todo.read")]
         [HttpGet]
         public IEnumerable<Models.TodoItem> GetAll()
         {
@@ -31,6 +31,7 @@ namespace Okta.DNX.OAuth.ResourceServer.Controllers
             return TodoItems.GetAll();
         }
 
+        [Authorize("todo.read")]
         [HttpGet("{id}", Name = "GetTodo")]
         public IActionResult GetById(string id)
         {
@@ -42,6 +43,7 @@ namespace Okta.DNX.OAuth.ResourceServer.Controllers
             return new ObjectResult(item);
         }
 
+        [Authorize("todo.write")]
         [HttpPost]
         public IActionResult Create([FromBody] Models.TodoItem item)
         {
@@ -53,6 +55,7 @@ namespace Okta.DNX.OAuth.ResourceServer.Controllers
             return CreatedAtRoute("GetTodo", new { id = item.Key }, item);
         }
 
+        [Authorize("todo.write")]
         [HttpPut("{id}")]
         public IActionResult Update(string id, [FromBody] Models.TodoItem item)
         {
@@ -71,6 +74,7 @@ namespace Okta.DNX.OAuth.ResourceServer.Controllers
             return new NoContentResult();
         }
 
+        [Authorize("todo.delete")]
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {

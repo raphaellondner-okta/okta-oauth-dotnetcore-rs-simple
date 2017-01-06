@@ -66,20 +66,35 @@ namespace Okta.DNX.OAuth.ResourceServer
 
             services.AddAuthentication();
             services.AddAuthorization(options =>
-            {
-                options.AddPolicy("todo.read",
-                    policy =>
-                    {
-                        policy
-                        .RequireClaim("cid", clientId)
-                       .RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "todolist.read");
-                    }
-                );
-            }
+                {
+                    options.AddPolicy("todo.read",
+                        policy =>
+                        {
+                            policy
+                            .RequireClaim("cid", clientId)
+                           .RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "todolist.read");
+                        }
+                    );
+                    options.AddPolicy("todo.write",
+                        policy =>
+                        {
+                            policy
+                            .RequireClaim("cid", clientId)
+                           .RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "todolist.write");
+                        }
+                    );
+                    options.AddPolicy("todo.delete",
+                        policy =>
+                        {
+                            policy
+                            .RequireClaim("cid", clientId)
+                           .RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "todolist.delete");
+                        }
+                    );
+                }
             );
 
             services.AddMvc();
-
             services.AddSingleton<ITodoRepository, TodoRepository>();
         }
 
