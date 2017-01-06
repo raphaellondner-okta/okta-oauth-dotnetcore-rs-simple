@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,40 +7,27 @@ using Microsoft.Extensions.Logging;
 
 using Okta.DNX.OAuth.ResourceServer.Models;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Protocols;
-using System.Security.Claims;
 
 namespace Okta.DNX.OAuth.ResourceServer
 {
     public class Startup
     {
-        string clientId = string.Empty;
-        string issuer = string.Empty;
-        string authorizationServerIssuer = string.Empty;
-        string audience = string.Empty;
-
+        readonly string clientId = string.Empty;
+        readonly string issuer = string.Empty;
+        readonly string authorizationServerIssuer = string.Empty;
+        readonly string audience = string.Empty;
 
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                 .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            if (env.IsEnvironment("Development"))
-            {
-                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                builder.AddApplicationInsightsSettings(developerMode: true);
-            }
 
             builder.AddEnvironmentVariables();
 
             Configuration = builder.Build();
-
 
             clientId = Configuration["okta:clientId"] as string;
             issuer = Configuration["okta:organizationUrl"];
@@ -56,14 +40,6 @@ namespace Okta.DNX.OAuth.ResourceServer
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            //services.AddApplicationInsightsTelemetry(Configuration);
-
-            //     var scopePolicy = new AuthorizationPolicyBuilder()
-            //.RequireAuthenticatedUser()
-            //.RequireClaim("scp", "call-api")
-            //.Build();
-
             services.AddAuthentication();
             services.AddAuthorization(options =>
                 {
@@ -93,7 +69,6 @@ namespace Okta.DNX.OAuth.ResourceServer
                     );
                 }
             );
-
             services.AddMvc();
             services.AddSingleton<ITodoRepository, TodoRepository>();
         }
@@ -105,11 +80,6 @@ namespace Okta.DNX.OAuth.ResourceServer
             loggerFactory.AddConsole(LogLevel.Trace);
             loggerFactory.AddDebug();
 
-            //app.UseApplicationInsightsRequestTelemetry();
-
-            //app.UseApplicationInsightsExceptionTelemetry();
-
-
             TokenValidationParameters tvps = new TokenValidationParameters
             {
                 ValidateAudience = true,
@@ -119,8 +89,6 @@ namespace Okta.DNX.OAuth.ResourceServer
                 ValidIssuer = authorizationServerIssuer,
 
                 ValidateLifetime = true,
-
-
                 ClockSkew = TimeSpan.FromMinutes(5)
             };
 

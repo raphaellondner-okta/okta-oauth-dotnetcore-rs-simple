@@ -11,6 +11,7 @@ namespace Okta.DNX.OAuth.ResourceServer.Models
 
         public TodoRepository()
         {
+            //Starting off the app with an example todo item
             Add(new TodoItem { Name = "Item1" });
         }
 
